@@ -36,8 +36,8 @@ export const uploadVideo = async (req, res) => {
       });
     }
 
-    const thumbnailUrl = await uploadtocloudinay(thumbnailFile.path);
-    const videoUrl = await uploadtocloudinay(videoFile.path);
+    const thumbnailUrl = await uploadtocloudinay(thumbnailFile.path, "image");
+    const videoUrl = await uploadtocloudinay(videoFile.path, "video");
 
     if (!thumbnailUrl || !videoUrl) {
       return res.status(500).json({ msg: "Failed to upload files" });

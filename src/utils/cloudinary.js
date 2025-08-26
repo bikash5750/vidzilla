@@ -11,10 +11,12 @@ cloudinary.config({
   api_secret: config.apiSecret,
 });
 
-const uploadtocloudinay = async (localfilepath)=> {
+const uploadtocloudinay = async (localfilepath, resourceType = "auto") => {
   try {
     if(!localfilepath) return null;
-    const response = await cloudinary.uploader.upload(localfilepath);
+    const response = await cloudinary.uploader.upload(localfilepath, {
+      resource_type: resourceType
+    });
     //console.log(`upload successfull The link is: ${response.secure_url}`)
     fs.unlinkSync(localfilepath);
     return response.secure_url;
@@ -22,8 +24,11 @@ const uploadtocloudinay = async (localfilepath)=> {
     
   } catch (error) {
     console.error("Upload error:", error);
-    fs.unlinkSync(localfilepath)
-    return console.log(`unable to link file`)
+    // Only delete file if it exists
+    if (fs.existsSync(localfilepath)) {
+      fs.unlinkSync(localfilepath);
+    }
+    return null; // Return null instead of console.log
   }
   
 }
